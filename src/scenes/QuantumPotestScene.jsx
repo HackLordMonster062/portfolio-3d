@@ -3,7 +3,6 @@ import { useFrame } from "@react-three/fiber"
 import { useRef } from "react"
 import UFO from "@/components/UFO"
 import { Environment } from "@react-three/drei"
-import { Vector3 } from "three"
 
 export default function QuantumPotestScene() {
     const ufoRef = useRef()
