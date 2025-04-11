@@ -1,6 +1,6 @@
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useRef, useState, forwardRef, useImperativeHandle } from 'react'
+import { useRef, useState, forwardRef, useImperativeHandle, useEffect } from 'react'
 import * as THREE from 'three'
 import { Noise } from 'noisejs'
 import useKeyboard from '/src/hooks/useKeyboard'
@@ -10,10 +10,12 @@ const noise = new Noise(Math.random())
 
 const UFO = forwardRef((
   { 
+    position,
     occAmount = 0.5, 
     occSpeed = 3, 
     moveSpeed = 0.1, 
     spinningSpeed = 0.02,
+    noiseValue = 0,
     bounds = { min: new THREE.Vector3(-50, -50, -50), max: new THREE.Vector3(50, 50, 50) }
   }, 
   ref
@@ -34,6 +36,12 @@ const UFO = forwardRef((
     }
   }), [])
 
+  useEffect(() => {
+    if (group.current && position) {
+      group.current.position.set(...position)
+    }
+  }, [position])
+
   useFrame((state, delta) => {
     if (!group.current) return
 
@@ -41,8 +49,8 @@ const UFO = forwardRef((
     const time = state.clock.getElapsedTime()
 
     const animHeight = occAmount * Math.sin(time * occSpeed)
-    const noiseHeight = noise.perlin2(model.position.x * 0.01, model.position.z * 0.01) * 50
-    model.position.y = animHeight + noiseHeight
+    const noiseHeight = noise.perlin2(model.position.x * 0.01, model.position.z * 0.01) * noiseValue
+    model.position.y = position[1] + animHeight + noiseHeight
 
     const v = velocity.current
     if (keys['KeyW'] || keys['ArrowUp']) v.z = Math.max(-moveSpeed, v.z - 0.01)
@@ -72,7 +80,7 @@ const UFO = forwardRef((
   })
 
   return (
-    <group ref={group}>
+    <group ref={group} position={position}>
       <primitive object={ufo} />
     </group>
   )

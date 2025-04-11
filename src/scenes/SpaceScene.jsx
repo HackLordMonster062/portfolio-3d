@@ -32,7 +32,7 @@ export default function SpaceScene() {
 
     return (
         <>
-            <UFO ref={ufoRef} />
+            <UFO ref={ufoRef} position={[0, 0, 0]} noiseValue={50} />
             <Stars />
             <FollowCamera />
 
