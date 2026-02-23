@@ -15,7 +15,7 @@ const UFO = forwardRef((
     occSpeed = 3, 
     moveSpeed = 0.1, 
     spinningSpeed = 0.02,
-    noiseValue = 0,
+    noiseValue = 0, // Replace with a modular terrain function
     bounds = { min: new THREE.Vector3(-50, -50, -50), max: new THREE.Vector3(50, 50, 50) }
   }, 
   ref
