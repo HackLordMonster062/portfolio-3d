@@ -36,7 +36,7 @@ export default function SpaceScene() {
             <Stars />
             <FollowCamera />
 
-            <Planet position={[-50, 0, -120]} radius={10} onClick={() => alert("Education")} materialProps={{color: 'green'}} />
+            <Planet position={[-50, 0, -120]} radius={10} onClick={() => setRoute('project/game-dev')} materialProps={{color: 'green'}} />
             <Planet position={[0, 0, -120]} radius={10} onClick={() => setRoute('project/quantum-potest')} materialProps={{color: 'yellow'}} />
             <Planet position={[50, 0, -120]} radius={10} onClick={() => alert("No Gold For You")} materialProps={{color: 'red'}} />
                 
