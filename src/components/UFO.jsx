@@ -5,27 +5,34 @@ import * as THREE from 'three'
 import { Noise } from 'noisejs'
 import useKeyboard from '/src/hooks/useKeyboard'
 import { clamp } from 'three/src/math/MathUtils.js'
+import usePlayerController from '@/hooks/UFO/usePlayerController'
+import useBobbingAnimation from '@/hooks/UFO/useBobbingAnimation'
 
 const noise = new Noise(Math.random())
 
 const UFO = forwardRef((
   { 
     position,
-    occAmount = 0.5, 
-    occSpeed = 3, 
+    bobAmount = 0.5, 
+    bobSpeed = 3, 
     moveSpeed = 0.1, 
     spinningSpeed = 0.02,
-    noiseValue = 0, // Replace with a modular terrain function
+    terrain = (position, time) => new THREE.Vector3(),
     bounds = { min: new THREE.Vector3(-50, -50, -50), max: new THREE.Vector3(50, 50, 50) }
   }, 
   ref
 ) => {
   const group = useRef()
   const { scene: ufo, nodes: ufoParts } = useGLTF('/src/assets/Portfolio.glb')
-  const keys = useKeyboard()
 
-  const [fireNoiseValue, setFireNoiseValue] = useState(0)
+  const fireNoiseValue = useRef(0)
   const velocity = useRef(new THREE.Vector3())
+
+  const motion = useRef({
+    basePosition: new THREE.Vector3(),
+    bobbing: new THREE.Vector3(),
+    velocity: new THREE.Vector3()
+  })
 
   useImperativeHandle(ref, () => ({
     get position() {
@@ -36,47 +43,34 @@ const UFO = forwardRef((
     }
   }), [])
 
-  useEffect(() => {
-    if (group.current && position) {
-      group.current.position.set(...position)
-    }
-  }, [position])
+  usePlayerController(motion, moveSpeed, bounds)
+  useBobbingAnimation(motion, bobAmount, bobSpeed)
 
   useFrame((state, delta) => {
     if (!group.current) return
-
-    const model = group.current
     const time = state.clock.getElapsedTime()
 
-    const animHeight = occAmount * Math.sin(time * occSpeed)
-    const noiseHeight = noise.perlin2(model.position.x * 0.01, model.position.z * 0.01) * noiseValue
-    model.position.y = position[1] + animHeight + noiseHeight
+    const model = group.current
 
-    const v = velocity.current
-    if (keys['KeyW'] || keys['ArrowUp']) v.z = Math.max(-moveSpeed, v.z - 0.01)
-    if (keys['KeyS'] || keys['ArrowDown']) v.z = Math.min(moveSpeed, v.z + 0.01)
-    if (keys['KeyA'] || keys['ArrowLeft']) v.x = Math.max(-moveSpeed, v.x - 0.01)
-    if (keys['KeyD'] || keys['ArrowRight']) v.x = Math.min(moveSpeed, v.x + 0.01)
-
-    model.position.set(
-      clamp(model.position.x + v.x, bounds.min.x, bounds.max.x),
-      clamp(model.position.y + v.y, bounds.min.y, bounds.max.y),
-      clamp(model.position.z + v.z, bounds.min.z, bounds.max.z)
-    )
-
-    model.rotation.x = mapRange(v.z, -moveSpeed, moveSpeed, -Math.PI / 6, Math.PI / 6)
-    model.rotation.z = mapRange(v.x, -moveSpeed, moveSpeed, Math.PI / 6, -Math.PI / 6)
+    model.rotation.x = mapRange(motion.current.velocity.z, -moveSpeed, moveSpeed, -Math.PI / 6, Math.PI / 6)
+    model.rotation.z = mapRange(motion.current.velocity.x, -moveSpeed, moveSpeed, Math.PI / 6, -Math.PI / 6)
 
     if (ufoParts.UFOBody) ufoParts.UFOBody.rotation.y += spinningSpeed
     if (ufoParts.UFOLights) ufoParts.UFOLights.rotation.y -= spinningSpeed
 
     if (ufoParts.UFOFire) {
-      const scale = noise.simplex2(fireNoiseValue, 2) * 0.2 + 1.2
+      const scale = noise.simplex2(time * 10000, 2) * 0.2 + 1.2
+      console.log(scale)
       ufoParts.UFOFire.scale.y = scale
     }
 
-    setFireNoiseValue((v) => v + delta * 10000)
-    velocity.current.multiplyScalar(1 - 0.05)
+    motion.current.velocity.multiplyScalar(1 - 0.05)
+
+    model.position.copy(motion.current.basePosition)
+    model.position.add(motion.current.bobbing)
+
+    const offset = terrain(motion.current.basePosition, time)
+    model.position.add(offset)
   })
 
   return (
