@@ -4,6 +4,7 @@ import SpaceScene from "./scenes/SpaceScene";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { Loader } from "@react-three/drei";
+import MainScene from "./scenes/MainScene";
 
 export default function App() {
 
@@ -14,7 +15,8 @@ export default function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/project/:sceneId" element={<SceneManager />} />
-              <Route path="/" element={<SpaceScene />} />
+              {/* <Route path="/" element={<SpaceScene />} />  Lobby scene*/}
+              <Route path="/" element={<MainScene />} />
             </Routes>
           </BrowserRouter>
         </Suspense>

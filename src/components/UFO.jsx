@@ -15,7 +15,7 @@ const UFO = forwardRef((
     position,
     bobAmount = 0.5, 
     bobSpeed = 3, 
-    moveSpeed = 0.1, 
+    moveSpeed = 0.2, 
     spinningSpeed = 0.02,
     terrain = (position, time) => new THREE.Vector3(),
     bounds = { min: new THREE.Vector3(-50, -50, -50), max: new THREE.Vector3(50, 50, 50) }
@@ -60,7 +60,6 @@ const UFO = forwardRef((
 
     if (ufoParts.UFOFire) {
       const scale = noise.simplex2(time * 10000, 2) * 0.2 + 1.2
-      console.log(scale)
       ufoParts.UFOFire.scale.y = scale
     }
 

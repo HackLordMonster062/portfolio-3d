@@ -9,6 +9,7 @@ import { cameraState } from "../components/FollowCamera"
 import { Vector3 } from "three"
 import { useNavigate } from 'react-router-dom'
 import { Noise } from "noisejs"
+import HtmlProximityPanel from "@/components/HtmlProximityPanel"
 
 const noise = new Noise(Math.random())
 
@@ -16,8 +17,6 @@ export default function SpaceScene() {
     const ufoRef = useRef();
     const [currRoute, setRoute] = useState(null);
     const navigate = useNavigate();
-
-    const [panelVisible, setPanelVisible] = useState(false)
 
     useEffect(() => {
         cameraState.targetView.copy(new Vector3(0, 0, -100))
@@ -32,8 +31,6 @@ export default function SpaceScene() {
     useFrame(() => {
         if (ufoRef.current) {
             cameraState.target.copy(ufoRef.current.position)
-
-            setPanelVisible(ufoRef.current.position.distanceTo(new Vector3(0, 0, 0)) <= 5)
         }
     })
 
@@ -55,17 +52,7 @@ export default function SpaceScene() {
             <ambientLight intensity={0.3} />
             <directionalLight position={[5, 10, 7]} intensity={1} />
 
-            <Html 
-                transform
-                distanceFactor={10}
-                position={[0, 0, 0.01]}
-            >
-                <div className={panelVisible ? "block" : "hidden"}>
-                    <h1 className="text-4xl bg-white">
-                        Hello
-                    </h1>
-                </div>
-            </Html>
+            <HtmlProximityPanel position={[0, 0, 0]} triggerRef={ufoRef} visibleDistance={10} />
 
             <Environment preset="sunset" />
         </>
