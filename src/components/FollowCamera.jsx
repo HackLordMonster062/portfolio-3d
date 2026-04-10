@@ -10,12 +10,14 @@ export const cameraState = {
 
 export default function FollowCamera({ speed = 0.05 }) {
   const { camera } = useThree()
+  const targetView = useRef(cameraState.targetView.clone())
 
   useFrame(() => {
     const desiredPos = cameraState.target.clone().add(cameraState.offset)
     camera.position.lerp(desiredPos, speed)
 
-    camera.lookAt(cameraState.targetView)
+    targetView.current.lerp(cameraState.targetView, speed)
+    camera.lookAt(targetView.current)
   })
 
   return null
