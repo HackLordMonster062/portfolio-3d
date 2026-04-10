@@ -20,6 +20,10 @@ export default function MainScene() {
     const { scene: guitar, nodes: guitarParts } = useGLTF('/src/assets/Guitar.glb')
     const pianoRef = useRef()
     const { scene: piano, nodes: pianoParts } = useGLTF('/src/assets/Piano.glb')
+    const sawBenchRef = useRef()
+    const { scene: sawBench, nodes: sawBenchParts } = useGLTF('/src/assets/SawBench.glb')
+    const catRef = useRef()
+    const { scene: cat, nodes: catParts } = useGLTF('/src/assets/Cat.glb')
 
     const clusters = [
         {
@@ -44,11 +48,11 @@ export default function MainScene() {
         },
         {
             id: 2,
-            enterRadius: 15,
-            exitRadius: 18,
+            enterRadius: 12,
+            exitRadius: 15,
             position: [20, 0, -110],
             triggerRef: useRef(false),
-            title: "מוזיקה",
+            title: "Music",
             text: "אני לומד לנגן, ולפעמים גם יוצר מוזיקה.",
             content: (
                 <>
@@ -58,13 +62,49 @@ export default function MainScene() {
                     <group ref={pianoRef} position={[3, -2, -5]} scale={[1.4, 1.4, 1.4]} rotation={[.3, .1, .3]}>
                         <primitive object={piano} />
                     </group>
+                    {/* Fix positions and shading in Blender. Maybe add some 3D notes floating around, and MAYBE find a way to play the track I created when you enter the cluster */}
+                </>
+            )
+        },
+        {
+            id: 3,
+            enterRadius: 15,
+            exitRadius: 18,
+            position: [-5, 0, -200],
+            triggerRef: useRef(false),
+            title: "Crafts",
+            text: "אני אוהב ליצור דברים פיזיים.",
+            content: (
+                <>
+                    <group ref={sawBenchRef} position={[-6, -8, 2]} scale={[.9, .9, .9]} rotation={[.3, .1, .3]}>
+                        <primitive object={sawBench} />
+                    </group>
+                    <group ref={catRef} position={[4, 2, -2]} scale={[1.4, 1.4, 1.4]} rotation={[-.2, 3.1, -.4]}>
+                        <primitive object={cat} />
+                    </group>
+                    {/* Fix the materials on the bench and tools, and separate them so they can all float
+                    Add:
+                    Origami crane (somehow)
+                    LEGO structure?
+                    */}
+                </>
+            )
+        },
+        {
+            id: 4,
+            enterRadius: 15,
+            exitRadius: 18,
+            position: [2, 0, -310],
+            triggerRef: useRef(false),
+            title: "Puzzles",
+            text: "אני אוהב לפתור בעיות.",
+            content: (
+                <>
+                    {/* Rubik's cube, Sudoku board + pencil, Jigsaw pieces? */}
                 </>
             )
         }
     ]
-
-    const enterRadius = 15
-    const exitRadius = 18
 
     useFrame(() => {
         if (ufoRef.current) {
