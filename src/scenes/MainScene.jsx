@@ -11,6 +11,8 @@ import { Vector3 } from "three";
 export default function MainScene() {
     const ufoRef = useRef();
 
+    const speed = useRef(.5)
+
     const polaroidRef = useRef()
     const robotRef = useRef()
     const { scene: robot, nodes: robotParts } = useGLTF('/src/assets/BlueRobot.glb')
@@ -24,13 +26,15 @@ export default function MainScene() {
     const { scene: sawBench, nodes: sawBenchParts } = useGLTF('/src/assets/SawBench.glb')
     const catRef = useRef()
     const { scene: cat, nodes: catParts } = useGLTF('/src/assets/Cat.glb')
+    const cubeRef = useRef()
+    const { scene: cube, nodes: cubeParts } = useGLTF('/src/assets/RubiksCube.glb')
 
     const clusters = [
         {
             id: 1,
             enterRadius: 15,
             exitRadius: 18,
-            position: [0, 0, -20],
+            position: [0, 0, -50],
             triggerRef: useRef(false),
             title: "Game dev",
             text: "אני יוצר משחקים. לפעמים אני גם מסיים אותם.",
@@ -50,7 +54,7 @@ export default function MainScene() {
             id: 2,
             enterRadius: 12,
             exitRadius: 15,
-            position: [20, 0, -110],
+            position: [20, 0, -210],
             triggerRef: useRef(false),
             title: "Music",
             text: "אני לומד לנגן, ולפעמים גם יוצר מוזיקה.",
@@ -70,7 +74,7 @@ export default function MainScene() {
             id: 3,
             enterRadius: 15,
             exitRadius: 18,
-            position: [-5, 0, -200],
+            position: [-5, 0, -400],
             triggerRef: useRef(false),
             title: "Crafts",
             text: "אני אוהב ליצור דברים פיזיים.",
@@ -84,7 +88,7 @@ export default function MainScene() {
                     </group>
                     {/* Fix the materials on the bench and tools, and separate them so they can all float
                     Add:
-                    Origami crane (somehow)
+                    Origami crane V
                     LEGO structure?
                     */}
                 </>
@@ -94,13 +98,16 @@ export default function MainScene() {
             id: 4,
             enterRadius: 15,
             exitRadius: 18,
-            position: [2, 0, -310],
+            position: [2, 0, -610],
             triggerRef: useRef(false),
             title: "Puzzles",
             text: "אני אוהב לפתור בעיות.",
             content: (
                 <>
-                    {/* Rubik's cube, Sudoku board + pencil, Jigsaw pieces? */}
+                    <group ref={cubeRef} position={[4, 2, -2]} scale={[1.4, 1.4, 1.4]} rotation={[-.2, 3.1, -.4]}>
+                        <primitive object={cube} />
+                    </group>
+                    {/* Sudoku board + pencil, Jigsaw pieces? */}
                 </>
             )
         }
@@ -117,15 +124,17 @@ export default function MainScene() {
 
             if (isInCluster || nextCluster === undefined) {
                 cameraState.targetView.copy(ufoRef.current.position).y = 2
+                speed.current = .2
             } else {
                 cameraState.targetView.copy(new Vector3().fromArray(nextCluster.position)).y = 2
+                speed.current = .5
             }
         }
     })
     
     return (
         <>
-            <UFO ref={ufoRef} position={[0, 0, 0]} bounds={{min: new Vector3(-40, -10, -300), max: new Vector3(40, 10, 40)}} />
+            <UFO ref={ufoRef} position={[0, 0, 0]} moveSpeed={speed} bounds={{min: new Vector3(-40, -10, -1000), max: new Vector3(40, 10, 40)}} />
             <FollowCamera />
 
             {clusters.map((cluster) => (

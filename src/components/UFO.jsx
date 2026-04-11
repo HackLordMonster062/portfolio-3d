@@ -13,9 +13,10 @@ const noise = new Noise(Math.random())
 const UFO = forwardRef((
   { 
     position,
+    moveSpeed,
     bobAmount = 0.5, 
     bobSpeed = 3, 
-    moveSpeed = 0.2, 
+    acceleration = .01,
     spinningSpeed = 0.02,
     terrain = (position, time) => new THREE.Vector3(),
     bounds = { min: new THREE.Vector3(-50, -50, -50), max: new THREE.Vector3(50, 50, 50) }
@@ -24,9 +25,6 @@ const UFO = forwardRef((
 ) => {
   const group = useRef()
   const { scene: ufo, nodes: ufoParts } = useGLTF('/src/assets/Portfolio.glb')
-
-  const fireNoiseValue = useRef(0)
-  const velocity = useRef(new THREE.Vector3())
 
   const motion = useRef({
     basePosition: new THREE.Vector3(),
@@ -43,7 +41,7 @@ const UFO = forwardRef((
     }
   }), [])
 
-  usePlayerController(motion, moveSpeed, bounds)
+  usePlayerController(motion, moveSpeed, acceleration, bounds)
   useBobbingAnimation(motion, bobAmount, bobSpeed)
 
   useFrame((state, delta) => {
@@ -52,8 +50,8 @@ const UFO = forwardRef((
 
     const model = group.current
 
-    model.rotation.x = mapRange(motion.current.velocity.z, -moveSpeed, moveSpeed, -Math.PI / 6, Math.PI / 6)
-    model.rotation.z = mapRange(motion.current.velocity.x, -moveSpeed, moveSpeed, Math.PI / 6, -Math.PI / 6)
+    model.rotation.x = mapRange(motion.current.velocity.z, -moveSpeed.current, moveSpeed.current, -Math.PI / 6, Math.PI / 6)
+    model.rotation.z = mapRange(motion.current.velocity.x, -moveSpeed.current, moveSpeed.current, Math.PI / 6, -Math.PI / 6)
 
     if (ufoParts.UFOBody) ufoParts.UFOBody.rotation.y += spinningSpeed
     if (ufoParts.UFOLights) ufoParts.UFOLights.rotation.y -= spinningSpeed
@@ -62,8 +60,6 @@ const UFO = forwardRef((
       const scale = noise.simplex2(time * 10000, 2) * 0.2 + 1.2
       ufoParts.UFOFire.scale.y = scale
     }
-
-    motion.current.velocity.multiplyScalar(1 - 0.05)
 
     model.position.copy(motion.current.basePosition)
     model.position.add(motion.current.bobbing)
