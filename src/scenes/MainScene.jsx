@@ -194,7 +194,7 @@ export default function MainScene() {
     
     return (
         <>
-            <Stars count={3000} maxDistance={2000} />
+            <Stars count={4000} maxDistance={2000} />
             <UFO 
                 ref={ufoRef} 
                 position={[0, 0, 0]} 
