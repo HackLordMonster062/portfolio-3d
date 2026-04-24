@@ -2,6 +2,7 @@ import Cluster from "@/components/Cluster";
 import FollowCamera, { cameraState } from "@/components/FollowCamera";
 import HtmlProximityPanel from "@/components/HtmlProximityPanel";
 import Polaroid from "@/components/Polaroid";
+import Stars from "@/components/Stars";
 import UFO from "@/components/UFO";
 import { Environment, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -193,7 +194,13 @@ export default function MainScene() {
     
     return (
         <>
-            <UFO ref={ufoRef} position={[0, 0, 0]} moveSpeed={speed} bounds={{min: new Vector3(-40, -10, -1000), max: new Vector3(40, 10, 40)}} />
+            <Stars count={3000} maxDistance={2000} />
+            <UFO 
+                ref={ufoRef} 
+                position={[0, 0, 0]} 
+                moveSpeed={speed} 
+                bounds={{min: new Vector3(-40, -10, -1000), max: new Vector3(40, 10, 40)}}
+            />
             <FollowCamera />
 
             <group position={[0, 0, -30]}>
