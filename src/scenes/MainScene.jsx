@@ -15,19 +15,21 @@ export default function MainScene() {
 
     const polaroidRef = useRef()
     const robotRef = useRef()
-    const { scene: robot, nodes: robotParts } = useGLTF('/src/assets/BlueRobot.glb')
+    const { scene: robot } = useGLTF('/src/assets/BlueRobot.glb')
     const towerRef = useRef()
-    const { scene: tower, nodes: towerParts } = useGLTF('/src/assets/WizardTower.glb')
+    const { scene: tower } = useGLTF('/src/assets/WizardTower.glb')
     const guitarRef = useRef()
-    const { scene: guitar, nodes: guitarParts } = useGLTF('/src/assets/Guitar.glb')
+    const { scene: guitar } = useGLTF('/src/assets/Guitar.glb')
     const pianoRef = useRef()
-    const { scene: piano, nodes: pianoParts } = useGLTF('/src/assets/Piano.glb')
+    const { scene: piano } = useGLTF('/src/assets/Piano.glb')
+    const noteRefs = [useRef(), useRef(), useRef(), useRef()]
+    const { scene: note, materials: noteMaterials } = useGLTF('/src/assets/Note.glb')
     const sawBenchRef = useRef()
-    const { scene: sawBench, nodes: sawBenchParts } = useGLTF('/src/assets/SawBench.glb')
+    const { scene: sawBench } = useGLTF('/src/assets/SawBench.glb')
     const catRef = useRef()
-    const { scene: cat, nodes: catParts } = useGLTF('/src/assets/Cat.glb')
+    const { scene: cat } = useGLTF('/src/assets/Cat.glb')
     const cubeRef = useRef()
-    const { scene: cube, nodes: cubeParts } = useGLTF('/src/assets/RubiksCube.glb')
+    const { scene: cube } = useGLTF('/src/assets/RubiksCube.glb')
 
     const clusters = [
         {
@@ -60,11 +62,31 @@ export default function MainScene() {
             text: "אני לומד לנגן, ולפעמים גם יוצר מוזיקה.",
             content: (
                 <>
-                    <group ref={guitarRef} position={[-2, -4, 4]} scale={[1.4, 1.4, 1.4]} rotation={[.3, .1, .3]}>
+                    <group ref={guitarRef} position={[-2, -6, 5]} scale={[2.2, 2.2, 2.2]} rotation={[.3, .1, .3]}>
                         <primitive object={guitar} />
                     </group>
-                    <group ref={pianoRef} position={[3, -2, -5]} scale={[1.4, 1.4, 1.4]} rotation={[.3, .1, .3]}>
+                    <group ref={pianoRef} position={[3, 3, -1]} scale={[1.2, 1.2, 1.2]} rotation={[.3, .1, .3]}>
                         <primitive object={piano} />
+                    </group>
+                    <group ref={noteRefs[0]} position={[-10, 2, 2]} scale={[.6, .6, .6]} rotation={[.4, .1, .2]}>
+                        <mesh geometry={note.children[0].geometry} castShadow>
+                            <meshStandardMaterial color="#000000" emissive="#ffff00" emissiveIntensity={1} />
+                        </mesh>
+                    </group>
+                    <group ref={noteRefs[1]} position={[-2, -1, 15]} scale={[.5, .5, .5]} rotation={[.2, .1, .2]}>
+                        <mesh geometry={note.children[0].geometry} castShadow>
+                            <meshStandardMaterial color="#000000" emissive="#ff00ff" emissiveIntensity={1} />
+                        </mesh>
+                    </group>
+                    <group ref={noteRefs[2]} position={[11, -2, 4]} scale={[.6, .6, .6]} rotation={[.25, .2, .1]}>
+                        <mesh geometry={note.children[0].geometry} castShadow>
+                            <meshStandardMaterial color="#000000" emissive="#ff2200" emissiveIntensity={1} />
+                        </mesh>
+                    </group>
+                    <group ref={noteRefs[3]} position={[2, 10, 1]} scale={[.6, .6, .6]} rotation={[.35, .15, .3]}>
+                        <mesh geometry={note.children[0].geometry} castShadow>
+                            <meshStandardMaterial color="#000000" emissive="#22ff88" emissiveIntensity={1} />
+                        </mesh>
                     </group>
                     {/* Fix positions and shading in Blender. Maybe add some 3D notes floating around, and MAYBE find a way to play the track I created when you enter the cluster */}
                 </>
@@ -80,7 +102,7 @@ export default function MainScene() {
             text: "אני אוהב ליצור דברים פיזיים.",
             content: (
                 <>
-                    <group ref={sawBenchRef} position={[-6, -8, 2]} scale={[.9, .9, .9]} rotation={[.3, .1, .3]}>
+                    <group ref={sawBenchRef} position={[-6, -8, 2]} scale={[.9, .9, .9]} rotation={[.3, 3.2, .3]}>
                         <primitive object={sawBench} />
                     </group>
                     <group ref={catRef} position={[4, 2, -2]} scale={[1.4, 1.4, 1.4]} rotation={[-.2, 3.1, -.4]}>
