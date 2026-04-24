@@ -26,10 +26,24 @@ export default function MainScene() {
     const { scene: note, materials: noteMaterials } = useGLTF('/src/assets/Note.glb')
     const sawBenchRef = useRef()
     const { scene: sawBench } = useGLTF('/src/assets/SawBench.glb')
+    const sawRef = useRef()
+    const { scene: saw } = useGLTF('/src/assets/Saw.glb')
+    const longPlankRef = useRef()
+    const { scene: longPlank } = useGLTF('/src/assets/LongPlank.glb')
+    const shortPlankRef = useRef()
+    const { scene: shortPlank } = useGLTF('/src/assets/ShortPlank.glb')
     const catRef = useRef()
     const { scene: cat } = useGLTF('/src/assets/Cat.glb')
+    const craneRef = useRef()
+    const { scene: crane } = useGLTF('/src/assets/origami_crane.glb')
     const cubeRef = useRef()
     const { scene: cube } = useGLTF('/src/assets/RubiksCube.glb')
+    const sudokuRef = useRef()
+    const { scene: sudoku } = useGLTF('/src/assets/Sudoku.glb')
+    const pencilRef = useRef()
+    const { scene: pencil } = useGLTF('/src/assets/Pencil.glb')
+    const screenRef = useRef()
+    const { scene: screen } = useGLTF('/src/assets/Screen.glb')
 
     const clusters = [
         {
@@ -88,7 +102,7 @@ export default function MainScene() {
                             <meshStandardMaterial color="#000000" emissive="#22ff88" emissiveIntensity={1} />
                         </mesh>
                     </group>
-                    {/* Fix positions and shading in Blender. Maybe add some 3D notes floating around, and MAYBE find a way to play the track I created when you enter the cluster */}
+                    {/* MAYBE find a way to play the track I created when you enter the cluster */}
                 </>
             )
         },
@@ -105,12 +119,23 @@ export default function MainScene() {
                     <group ref={sawBenchRef} position={[-6, -8, 2]} scale={[.9, .9, .9]} rotation={[.3, 3.2, .3]}>
                         <primitive object={sawBench} />
                     </group>
-                    <group ref={catRef} position={[4, 2, -2]} scale={[1.4, 1.4, 1.4]} rotation={[-.2, 3.1, -.4]}>
+                    <group ref={sawRef} position={[-8, -1.5, 3]} scale={[1.1, 1.1, 1.1]} rotation={[.2, 2.5, .2]}>
+                        <primitive object={saw} />
+                    </group>
+                    <group ref={longPlankRef} position={[-4, -3, 2]} scale={[1, 1, 1]} rotation={[.3, 3.2, .1]}>
+                        <primitive object={longPlank} />
+                    </group>
+                    <group ref={shortPlankRef} position={[-1, -3, 3]} scale={[1, 1, 1]} rotation={[.3, 3.2, .3]}>
+                        <primitive object={shortPlank} />
+                    </group>
+                    <group ref={catRef} position={[7, 4, -3]} scale={[1.4, 1.4, 1.4]} rotation={[-.2, 3.1, -.4]}>
                         <primitive object={cat} />
                     </group>
-                    {/* Fix the materials on the bench and tools, and separate them so they can all float
+                    <group ref={craneRef} position={[-10, 5, -2]} scale={[2.5, 2.5, 2.5]} rotation={[-.2, 3.8, -.4]}>
+                        <primitive object={crane} />
+                    </group>
+                    {/*
                     Add:
-                    Origami crane V
                     LEGO structure?
                     */}
                 </>
@@ -126,10 +151,18 @@ export default function MainScene() {
             text: "אני אוהב לפתור בעיות.",
             content: (
                 <>
-                    <group ref={cubeRef} position={[4, 2, -2]} scale={[1.4, 1.4, 1.4]} rotation={[-.2, 3.1, -.4]}>
+                    <group ref={cubeRef} position={[8, 5, -3]} scale={[1.4, 1.4, 1.4]} rotation={[-.2, 3.1, -.4]}>
                         <primitive object={cube} />
                     </group>
-                    {/* Sudoku board + pencil, Jigsaw pieces? */}
+                    <group ref={sudokuRef} position={[-11, 4, -2]} scale={[2.3, 2.3, 2.3]} rotation={[1.6, 0, -.3]}>
+                        <primitive object={sudoku} />
+                    </group>
+                    <group ref={pencilRef} position={[-11, 3, 3]} scale={[1.9, 1.9, 1.9]} rotation={[1.6, 0, 3.5]}>
+                        <primitive object={pencil} />
+                    </group>
+                    <group ref={screenRef} position={[-6, -8, 5]} scale={[2.8, 2.8, 2.8]} rotation={[-.4, 2.9, .2]}>
+                        <primitive object={screen} />
+                    </group>
                 </>
             )
         }
