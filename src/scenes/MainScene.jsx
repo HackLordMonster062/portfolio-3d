@@ -14,6 +14,10 @@ export default function MainScene() {
     const speed = useRef(.5)
 
     const polaroidRef = useRef()
+    const titleRef = useRef()
+    const { scene: title } = useGLTF('/src/assets/Title.glb')
+    const AstronautRef = useRef()
+    const { scene: astronaut } = useGLTF('/src/assets/Astronaut.glb')
     const robotRef = useRef()
     const { scene: robot } = useGLTF('/src/assets/BlueRobot.glb')
     const towerRef = useRef()
@@ -50,7 +54,7 @@ export default function MainScene() {
             id: 1,
             enterRadius: 15,
             exitRadius: 18,
-            position: [0, 0, -50],
+            position: [0, 0, -150],
             triggerRef: useRef(false),
             title: "Game dev",
             text: "אני יוצר משחקים. לפעמים אני גם מסיים אותם.",
@@ -70,7 +74,7 @@ export default function MainScene() {
             id: 2,
             enterRadius: 12,
             exitRadius: 15,
-            position: [20, 0, -210],
+            position: [20, 0, -310],
             triggerRef: useRef(false),
             title: "Music",
             text: "אני לומד לנגן, ולפעמים גם יוצר מוזיקה.",
@@ -110,7 +114,7 @@ export default function MainScene() {
             id: 3,
             enterRadius: 15,
             exitRadius: 18,
-            position: [-5, 0, -400],
+            position: [-5, 0, -500],
             triggerRef: useRef(false),
             title: "Crafts",
             text: "אני אוהב ליצור דברים פיזיים.",
@@ -145,7 +149,7 @@ export default function MainScene() {
             id: 4,
             enterRadius: 15,
             exitRadius: 18,
-            position: [2, 0, -610],
+            position: [2, 0, -710],
             triggerRef: useRef(false),
             title: "Puzzles",
             text: "אני אוהב לפתור בעיות.",
@@ -191,6 +195,11 @@ export default function MainScene() {
         <>
             <UFO ref={ufoRef} position={[0, 0, 0]} moveSpeed={speed} bounds={{min: new Vector3(-40, -10, -1000), max: new Vector3(40, 10, 40)}} />
             <FollowCamera />
+
+            <group position={[0, 0, -30]}>
+                <primitive object={title} position={[0, 5, 0]} scale={[3, 3, 3]} />
+                <primitive object={astronaut} position={[0, 15, 0]} scale={[1, 1, 1]} rotation={[0, -1.7, 0]} />
+            </group>
 
             {clusters.map((cluster) => (
                 <Cluster key={cluster.id} position={cluster.position} enterRadius={cluster.enterRadius} exitRadius={cluster.exitRadius} triggerRef={ufoRef} isTriggeredRef={cluster.triggerRef}>
